@@ -38,7 +38,7 @@ export default function connectToStore() {
     }
 
     return function connectComponent(props) {
-      return Component({ name: 'connect', log: false, initState, props, connect, render })
+      return Component({ name: `connect-${baseComponent.name}`, log: false, initState, props, connect, render })
     }
 
   }
