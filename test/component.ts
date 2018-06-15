@@ -975,6 +975,7 @@ describe('Component', () => {
     type StoreType = typeof store
 
     type Props = {
+      key?: string
       counter: number // From the store
       mode: '1' | '2' // From the direct parent
       opt?: string
@@ -1001,19 +1002,19 @@ describe('Component', () => {
       store => ({ counter: store.state().num })
     )
 
-    const initVDOM = ConnectedComponent({ mode: '1', store })
+    const initVDOM = ConnectedComponent({ key: 'daKey', mode: '1', store })
 
     RenderInto(document.body, initVDOM)
       .then(() => {
-        expect(renderedProps).toEqual([{ mode: '1', counter: 1 }])
+        expect(renderedProps).toEqual([{ key: 'daKey', mode: '1', counter: 1 }])
       })
       .then(() => {
-        const newVDOM = ConnectedComponent({ mode: '1', store })
+        const newVDOM = ConnectedComponent({ key: 'daKey', mode: '1', store })
         return RenderInto(initVDOM, newVDOM).then(() => newVDOM)
       })
       .then(currentVDOM => {
         // This should be a noop as no props were changed
-        expect(renderedProps).toEqual([{ mode: '1', counter: 1 }])
+        expect(renderedProps).toEqual([{ key: 'daKey', mode: '1', counter: 1 }])
         renderedProps.length = 0
 
         const newVDOM = ConnectedComponent({ mode: '2', store })
