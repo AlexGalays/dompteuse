@@ -587,7 +587,7 @@ describe('Component', () => {
             expect(message.payload[1].currentTarget).toExist()
             receivedMessages.push(message.payload[0])
           }
-          
+
           else if (message.is(messageFromTheRight2)) {
             expect(message.payload[1].currentTarget).toExist()
             receivedMessages.push(message.payload[0])
@@ -649,7 +649,7 @@ describe('Component', () => {
   it('only calls render when props and states significantly changed', done => {
 
     let parentRenderCount = 0
-    let childRenderCount = 0 
+    let childRenderCount = 0
 
     let parentMsg: Messages
 
@@ -895,7 +895,7 @@ describe('Component', () => {
   })
 
   it('removes previously bound messages DOM listeners', done => {
-    
+
     const clickPayloads: number[] = []
     const click = Message<number, MouseEvent>('click')
 
@@ -979,6 +979,7 @@ describe('Component', () => {
       counter: number // From the store
       mode: '1' | '2' // From the direct parent
       opt?: string
+      store: StoreType
     }
 
     const BaseComponent = (() => {
@@ -1006,7 +1007,7 @@ describe('Component', () => {
 
     RenderInto(document.body, initVDOM)
       .then(() => {
-        expect(renderedProps).toEqual([{ key: 'daKey', mode: '1', counter: 1 }])
+        expect(renderedProps).toEqual([{ key: 'daKey', mode: '1', counter: 1, store }])
       })
       .then(() => {
         const newVDOM = ConnectedComponent({ key: 'daKey', mode: '1', store })
@@ -1014,14 +1015,14 @@ describe('Component', () => {
       })
       .then(currentVDOM => {
         // This should be a noop as no props were changed
-        expect(renderedProps).toEqual([{ key: 'daKey', mode: '1', counter: 1 }])
+        expect(renderedProps).toEqual([{ key: 'daKey', mode: '1', counter: 1, store }])
         renderedProps.length = 0
 
         const newVDOM = ConnectedComponent({ mode: '2', store })
         return RenderInto(currentVDOM, newVDOM)
       })
       .then(() => {
-        expect(renderedProps).toEqual([{ mode: '2', counter: 1 }])
+        expect(renderedProps).toEqual([{ mode: '2', counter: 1, store }])
         renderedProps.length = 0
       })
       .then(() => {
@@ -1029,7 +1030,7 @@ describe('Component', () => {
         return nextFrame()
       })
       .then(() => {
-        expect(renderedProps).toEqual([{ mode: '2', counter: 2 }])
+        expect(renderedProps).toEqual([{ mode: '2', counter: 2, store }])
         renderedProps.length = 0
       })
       .then(() => {
@@ -1076,7 +1077,7 @@ describe('Component', () => {
           }
         })
       }
-    
+
       return function(props: Props) {
         return Component<Props, {}>({ name: 'baseComponent', props, initState, connect, render })
       }

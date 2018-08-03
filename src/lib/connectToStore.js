@@ -14,13 +14,7 @@ export default function connectToStore() {
     function connect({ on, props, state, msg }) {
       const { store } = props()
 
-      on(props, unfilteredExternalProps => {
-        const externalProps = {}
-
-        Object.keys(unfilteredExternalProps).forEach(key => {
-          if (key !== 'store') externalProps[key] = unfilteredExternalProps[key]
-        })
-
+      on(props, externalProps => {
         return assign({}, state(), { externalProps })
       })
 
